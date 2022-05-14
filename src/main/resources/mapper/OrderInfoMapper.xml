@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chat.letter.dao.OrderInfoMapper">
+	<resultMap id="BaseResultMap" type="com.chat.letter.po.OrderInfo">
+		<id column="order_id" property="orderId" jdbcType="INTEGER" />
+		<result column="order_code" property="orderCode" jdbcType="VARCHAR" />
+		<result column="order_type" property="orderType" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="cost_id" property="costId" jdbcType="INTEGER" />
+		<result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+		<result column="order_coin_count" property="orderCoinCount" jdbcType="INTEGER" />
+		<result column="order_count" property="orderCount" jdbcType="DOUBLE" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		order_id,order_code,order_type,user_id,cost_id,
+		order_status,order_coin_count,order_count,create_time
+	</sql>
+
+	<insert id="insertSelective" parameterType="com.chat.letter.po.OrderInfo" useGeneratedKeys="true" keyProperty="orderId">
+		insert into tb_order_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="orderCode != null">
+				order_code,
+			</if>
+			<if test="orderType != null">
+				order_type,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="costId != null">
+				cost_id,
+			</if>
+			<if test="orderStatus != null">
+				order_status,
+			</if>
+			<if test="orderCoinCount != null">
+				order_coin_count,
+			</if>
+			<if test="orderCount != null">
+				order_count,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="orderCode != null">
+				#{orderCode},
+			</if>
+			<if test="orderType != null">
+				#{orderType},
+			</if>
+			<if test="userId != null">
+				#{userId},
+			</if>
+			<if test="costId != null">
+				#{costId},
+			</if>
+			<if test="orderStatus != null">
+				#{orderStatus},
+			</if>
+			<if test="orderCoinCount != null">
+				#{orderCoinCount},
+			</if>
+			<if test="orderCount != null">
+				#{orderCount},
+			</if>
+			<if test="createTime != null">
+				#{createTime},
+			</if>
+		</trim>
+	</insert>
+
+	<select id="selectOrderInfoByConditions" resultMap="BaseResultMap" parameterType="com.chat.letter.po.OrderInfo">
+		select
+		<include refid="Base_Column_List" />
+		from tb_order_info where 1=1
+		<if test="oriUserId != null">
+			user_id = #{userId},
+		</if>
+		<if test="orderId != null">
+			order_id = #{orderId},
+		</if>
+		<if test="status != null">
+			status = #{status},
+		</if>
+		order by create_time desc
+	</select>
+
+</mapper>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chat.letter.dao.VedioInfoMapper">
+	<resultMap id="BaseResultMap" type="com.chat.letter.po.VedioInfo">
+		<id column="vedio_id" property="VedioId" jdbcType="INTEGER" />
+		<result column="user_id_send" property="userIdSend" jdbcType="INTEGER" />
+		<result column="user_id_recive" property="userIdRecive" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="vedio_dura" property="vedioDura" jdbcType="INTEGER" />
+		<result column="remain_dura" property="remainDura" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		vedio_id,user_id_send, user_id_recive,status,vedio_dura,remain_dura,create_time,end_time
+	</sql>
+
+	<insert id="insertSelective" parameterType="com.chat.letter.po.VedioInfo" useGeneratedKeys="true" keyProperty="VedioId">
+		insert into tb_vedio_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userIdSend != null">
+				user_id_send,
+			</if>
+			<if test="userIdRecive != null">
+				user_id_recive,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="vedioDura != null">
+				vedio_dura,
+			</if>
+			<if test="remainDura != null">
+				remain_dura,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="endTime != null">
+				end_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userIdSend != null">
+				#{userIdSend},
+			</if>
+			<if test="userIdRecive != null">
+				#{userIdRecive},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+			<if test="vedioDura != null">
+				#{vedioDura},
+			</if>
+			<if test="remainDura != null">
+				#{remainDura},
+			</if>
+			<if test="createTime != null">
+				#{createTime},
+			</if>
+			<if test="endTime != null">
+				#{endTime},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="update" parameterType="com.chat.letter.po.VedioInfo">
+		update tb_vedio_info
+		<trim prefix="set " suffixOverrides=",">
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="vedioDura != null">
+				vedio_dura = #{vedioDura},
+			</if>
+			<if test="remainDura != null">
+				remain_dura = #{remainDura},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime},
+			</if>
+			where vedio_id = #{vedioId}
+		</trim>
+	</update>
+
+	<select id="selectVedioInfoByConditions" resultMap="BaseResultMap" parameterType="com.chat.letter.po.VedioInfo">
+		select
+		<include refid="Base_Column_List" />
+		from tb_vedio_info where 1=1
+		<if test="userIdSend != null">
+			user_id_send = #{userIdSend},
+		</if>
+		<if test="userIdRecive != null">
+			user_id_recive = #{userIdRecive},
+		</if>
+		<if test="status != null">
+			status = #{status},
+		</if>
+		order by create_time desc
+	</select>
+</mapper>

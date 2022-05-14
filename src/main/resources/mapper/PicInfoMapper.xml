@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chat.letter.dao.PicInfoMapper">
+	<resultMap id="BaseResultMap" type="com.chat.letter.po.PicInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="pic_name" property="picName" jdbcType="VARCHAR" />
+		<result column="pic_add" property="picAdd" jdbcType="VARCHAR" />
+		<result column="pic_type" property="picType" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,user_id, pic_name,
+		pic_add,pic_type,status,create_time,update_time
+	</sql>
+
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_user_info where user_status = 1
+	</select>
+
+	<select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_user_info where user_id = #{userId} and user_status = 1
+	</select>
+
+	<insert id="insertSelective" parameterType="com.chat.letter.po.PicInfo" useGeneratedKeys="true" keyProperty="id">
+		insert into tb_pic_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="user_id != null">
+				user_id,
+			</if>
+			<if test="picName != null">
+				pic_name,
+			</if>
+			<if test="picAdd != null">
+				pic_add,
+			</if>
+			<if test="picType != null">
+				pic_type,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null">
+				#{userId,jdbcType=INTEGER},
+			</if>
+			<if test="picName != null">
+				#{picName,jdbcType=VARCHAR},
+			</if>
+			<if test="picAdd != null">
+				#{picAdd,jdbcType=VARCHAR},
+			</if>
+			<if test="picType != null">
+				#{picType,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+	<select id="selectUserInfoByConditions" resultMap="BaseResultMap" parameterType="com.chat.letter.po.UserInfo">
+		select
+		<include refid="Base_Column_List" />
+		from tb_user_info where 1=1
+		<if test="userName != null">
+			and user_name = #{userName}
+		</if>
+		<if test="userPhone != null">
+			and user_phone = #{userPhone}
+		</if>
+		<if test="userPwd != null">
+			and user_pwd = #{userPwd}
+		</if>
+		<if test="userType != null">
+			and user_type = #{userType}
+		</if>
+		<if test="userStatus != null">
+			and user_status = #{userStatus}
+		</if>
+		<if test="userOnline != null">
+			and user_online = #{userOnline}
+		</if>
+	</select>
+
+	<update id="update" parameterType="com.chat.letter.po.UserInfo">
+		update tb_user_info
+		<trim prefix="set " suffixOverrides=",">
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="userPwd != null">
+				user_pwd = #{userPwd,jdbcType=VARCHAR},
+			</if>
+			<if test="userType != null">
+				user_type = #{userType,jdbcType=INTEGER},
+			</if>
+			<if test="userCom != null">
+				user_com = #{userCom,jdbcType=VARCHAR},
+			</if>
+			<if test="userHeadPic != null">
+				user_head_pic = #{userHeadPic,jdbcType=VARCHAR},
+			</if>
+			<if test="userStatus != null">
+				user_status = #{userStatus,jdbcType=INTEGER},
+			</if>
+			<if test="userOnline != null">
+				user_online = #{userOnline,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		    where user_id = #{userId,jdbcType=INTEGER}
+	</update>
+</mapper>

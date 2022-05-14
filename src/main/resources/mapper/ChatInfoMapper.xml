@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chat.letter.dao.ChatInfoMapper">
+	<resultMap id="BaseResultMap" type="com.chat.letter.po.ChatInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_id_sender" property="userIdSender" jdbcType="INTEGER" />
+		<result column="user_id_reciver" property="userIdRevicer" jdbcType="INTEGER" />
+		<result column="chat_text" property="chatText" jdbcType="VARCHAR" />
+		<result column="chat_type" property="chatType" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,user_id_sender, user_id_reciver,
+		chat_text,chat_type,status,create_time
+	</sql>
+
+	<insert id="insertSelective" parameterType="com.chat.letter.po.ChatInfo" useGeneratedKeys="true" keyProperty="id">
+		insert into tb_chat_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userIdSender != null">
+				user_id_sender,
+			</if>
+			<if test="userIdReciver != null">
+				user_id_reciver,
+			</if>
+			<if test="chatText != null">
+				chat_text,
+			</if>
+			<if test="chatType != null">
+				chat_type,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+		    order by create_time desc;
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userIdSender != null">
+				#{userIdSender,jdbcType=INTEGER},
+			</if>
+			<if test="userIdReciver != null">
+				#{userIdReciver,jdbcType=INTEGER},
+			</if>
+			<if test="chatText != null">
+				#{chatText,jdbcType=VARCHAR},
+			</if>
+			<if test="chatType != null">
+				#{chatType,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+	<select id="selectChatInfoByConditions" resultMap="BaseResultMap" parameterType="com.chat.letter.po.ChatInfo">
+		select
+		<include refid="Base_Column_List" />
+		from tb_chat_info where 1=1
+		<if test="userIdSender != null">
+			user_id_sender = #{userIdSender}
+		</if>
+		<if test="userIdReciver != null">
+			user_id_reciver = #{userIdReciver},
+		</if>
+		<if test="status != null">
+			status = #{status}
+		</if>
+		order by createTime desc
+	</select>
+
+	<update id="updateStatus" parameterType="com.chat.letter.po.ChatInfo">
+		update tb_chat_info set status = 0
+		where user_id_sender = #{userIdSender,jdbcType=INTEGER}
+	</update>
+
+</mapper>
